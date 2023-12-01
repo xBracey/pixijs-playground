@@ -1,13 +1,33 @@
-import { Sprite, Texture, Ticker } from "pixi.js";
-import { Entity } from "./object";
+import { Texture } from "pixi.js";
+import { Entity } from "../utils/entity";
 
 type PlayerState = "up" | "down" | "idle";
+
+interface PlayerKeys {
+  up: string;
+  down: string;
+}
+
+const playerOneKeys: PlayerKeys = {
+  up: "w",
+  down: "s",
+};
+const playerTwoKeys: PlayerKeys = {
+  up: "ArrowUp",
+  down: "ArrowDown",
+};
 
 export class Player {
   public readonly entity: Entity;
   private state: PlayerState = "idle";
+  private keys: PlayerKeys;
 
-  constructor(x: number, y: number, isPlayerControlled: boolean) {
+  constructor(
+    x: number,
+    y: number,
+    player: "player1" | "player2",
+    isCpu: boolean
+  ) {
     this.entity = new Entity({
       texture: Texture.WHITE,
       width: 50,
@@ -15,11 +35,12 @@ export class Player {
       tint: 0xffffff,
       x,
       y,
+      id: player,
     });
 
-    this.entity.anchor.set(0.5, 0.5);
+    this.keys = player === "player1" ? playerOneKeys : playerTwoKeys;
 
-    if (isPlayerControlled) {
+    if (!isCpu) {
       window.addEventListener("keydown", this.onKeyDown);
       window.addEventListener("keyup", this.onKeyUp);
     }
@@ -28,9 +49,9 @@ export class Player {
   public onKeyDown = (event: KeyboardEvent): void => {
     console.log(event.key);
 
-    if (event.key === "ArrowUp") {
+    if (event.key === this.keys.up) {
       this.state = "up";
-    } else if (event.key === "ArrowDown") {
+    } else if (event.key === this.keys.down) {
       this.state = "down";
     }
   };
@@ -38,9 +59,9 @@ export class Player {
   public onKeyUp = (event: KeyboardEvent): void => {
     console.log(event.key);
 
-    if (event.key === "ArrowUp" && this.state === "up") {
+    if (event.key === this.keys.up && this.state === "up") {
       this.state = "idle";
-    } else if (event.key === "ArrowDown" && this.state === "down") {
+    } else if (event.key === this.keys.down && this.state === "down") {
       this.state = "idle";
     }
   };
