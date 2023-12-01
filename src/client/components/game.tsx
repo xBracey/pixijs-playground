@@ -1,16 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import { EngineContext } from "../context";
 
-export const Game = () => {
-  const pixi = useContext(EngineContext);
+interface GameProps {
+  addToDOM: (element: HTMLElement) => void;
+  ready?: boolean;
+}
 
+export const Game = ({ addToDOM, ready }: GameProps) => {
   useEffect(() => {
-    if (pixi) {
+    if (ready) {
       const gameElement = document.getElementById("game");
 
-      if (gameElement) pixi.addToDOM(gameElement);
+      if (gameElement) addToDOM(gameElement);
     }
-  }, []);
+  }, [ready]);
 
   return <div id="game" />;
 };

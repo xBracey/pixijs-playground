@@ -21,7 +21,7 @@ export const App = () => {
 
     window.addEventListener("keydown", (e) => {
       if (e.key === " ") {
-        Array.from({ length: 100 }).forEach(() => addBlock());
+        Array.from({ length: 1000 }).forEach(() => addBlock());
       }
     });
   }, []);
@@ -43,7 +43,7 @@ export const App = () => {
             Points <span className="text-lime-500">{points}</span>
           </p>
         </div>
-        <Game />
+        <Game addToDOM={engine.addToDOM} ready={!!engine} />
       </div>
     </div>
   );
