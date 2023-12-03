@@ -43,7 +43,7 @@ export const App = () => {
             Points <span className="text-lime-500">{points}</span>
           </p>
         </div>
-        <Game addToDOM={engine.addToDOM} ready={!!engine} />
+        <Game addToDOM={engine.addToDOM.bind(engine)} ready={!!engine} />
       </div>
     </div>
   );

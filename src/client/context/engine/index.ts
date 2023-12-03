@@ -1,10 +1,4 @@
-import {
-  Application,
-  BackgroundSystem,
-  Sprite,
-  Ticker,
-  autoDetectRenderer,
-} from "pixi.js";
+import { Application, Sprite, Ticker } from "pixi.js";
 import { Block } from "./block";
 import { v4 as uuidv4 } from "uuid";
 

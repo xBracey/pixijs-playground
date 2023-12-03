@@ -14,13 +14,15 @@ export class PongGame {
   private readonly entityGroup: EntityGroup;
   private readonly points: ReactState<[number, number]>;
 
-  constructor() {
+  constructor(
+    setPointState: React.Dispatch<React.SetStateAction<[number, number]>>
+  ) {
     this.app = new PixiBase(800, 600);
     this.playerOne = new Player(50, 0, "player1", false);
     this.playerTwo = new Player(750, 0, "player2", false);
     this.ball = new Ball(400, 300);
     this.walls = new Walls(800, 600);
-    this.points = new ReactState([0, 0]);
+    this.points = new ReactState([0, 0], setPointState);
 
     this.app.ticker.add(this.playerOne.onTick.bind(this.playerOne));
     this.app.ticker.add(this.playerTwo.onTick.bind(this.playerTwo));
@@ -42,12 +44,6 @@ export class PongGame {
 
     this.ball.start();
   }
-
-  public addPointsSetState = (
-    setState: React.Dispatch<React.SetStateAction<[number, number]>>
-  ) => {
-    this.points.setState = setState;
-  };
 
   public get ticker() {
     return this.app.ticker;

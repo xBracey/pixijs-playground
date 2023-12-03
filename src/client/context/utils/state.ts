@@ -1,14 +1,14 @@
 export class ReactState<T> {
   public state: T;
-  public setState?: React.Dispatch<React.SetStateAction<T>>;
+  public setState: React.Dispatch<React.SetStateAction<T>>;
 
-  constructor(initialState: T) {
+  constructor(
+    initialState: T,
+    setState: React.Dispatch<React.SetStateAction<T>>
+  ) {
     this.state = initialState;
-  }
-
-  public addSetState = (setState: React.Dispatch<React.SetStateAction<T>>) => {
     this.setState = setState;
-  };
+  }
 
   public updateState = (state: T): void => {
     if (!this.setState) {

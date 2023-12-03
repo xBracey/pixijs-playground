@@ -1,15 +1,15 @@
 import React, { useContext, useEffect } from "react";
 import "../index.css";
 import { Game } from "../components/game";
-import { PongContext } from "../context";
+import { PongGame } from "../context/pong";
 
 export const Pong = () => {
   const [points, setPoints] = React.useState<[number, number]>([0, 0]);
-  const game = useContext(PongContext);
+  const [game, setGame] = React.useState<PongGame | null>(null);
 
-  useEffect(() => {
-    game.addPointsSetState(setPoints);
-  }, []);
+  const onStartGame = () => {
+    setGame(new PongGame(setPoints));
+  };
 
   return (
     <div className="flex justify-center p-4 bg-gray-900 w-screen h-screen">
@@ -25,7 +25,14 @@ export const Pong = () => {
           </p>
         </div>
 
-        <Game addToDOM={game.addToDOM.bind(game)} ready={!!game} />
+        <button
+          className="bg-lime-500 hover:bg-lime-700 text-gray-900 font-bold py-2 px-4 rounded my-4"
+          onClick={onStartGame}
+        >
+          Start Game
+        </button>
+
+        {game && <Game addToDOM={game.addToDOM.bind(game)} ready={!!game} />}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
-import { EngineContext, PongContext } from "./context";
+import { EngineContext } from "./context";
 import { PixiEngine } from "./context/engine";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PongGame } from "./context/pong";
@@ -18,11 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/pong",
-    element: (
-      <PongContext.Provider value={new PongGame()}>
-        <Pong />
-      </PongContext.Provider>
-    ),
+    element: <Pong />,
   },
 ]);
 

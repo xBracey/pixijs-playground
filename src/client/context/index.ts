@@ -1,6 +1,5 @@
 import { createContext } from "react";
 import { PixiEngine } from "./engine";
-import { PongGame } from "./pong";
+import React from "react";
 
 export const EngineContext = createContext(new PixiEngine());
-export const PongContext = createContext(new PongGame());
