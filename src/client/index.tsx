@@ -6,6 +6,7 @@ import { PixiEngine } from "./context/engine";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PongGame } from "./context/pong";
 import { Pong } from "./games/pong";
+import { TowerDefence } from "../tower-defence/app";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/pong",
     element: <Pong />,
+  },
+  {
+    path: "/tower-defence",
+    element: <TowerDefence />,
   },
 ]);
 
