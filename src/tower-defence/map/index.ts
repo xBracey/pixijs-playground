@@ -1,14 +1,13 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import { TileKey, Tilesheet } from "../tilesheet";
+import { MAP_HEIGHT, MAP_WIDTH } from "../shared/constants";
 
-const mapWidth = 16;
-const mapHeight = 12;
 const defaultTile: TileKey = "grass";
 
 // None is only used for the end tile
 type PathDirection = "up" | "down" | "left" | "right" | "none";
 
-interface PathTile {
+export interface PathTile {
   x: number;
   y: number;
   direction: PathDirection;
@@ -28,9 +27,9 @@ export class Map {
     return new Promise((resolve) => {
       setInterval(() => {
         if (this.tilesheet.spritesheetLoaded) {
-          for (let x = 0; x < mapWidth; x++) {
+          for (let x = 0; x < MAP_WIDTH; x++) {
             this.tiles[x] = [];
-            for (let y = 0; y < mapHeight; y++) {
+            for (let y = 0; y < MAP_HEIGHT; y++) {
               this.tiles[x][y] = defaultTile;
             }
           }
@@ -40,11 +39,19 @@ export class Map {
     });
   }
 
+  public getPathTiles(): PathTile[] {
+    return this.pathTiles;
+  }
+
+  public getTexture(tile: TileKey): Texture {
+    return this.tilesheet.getTexture(tile);
+  }
+
   public getMapContainer(): Container {
     const container = new Container();
 
-    for (let x = 0; x < mapWidth; x++) {
-      for (let y = 0; y < mapHeight; y++) {
+    for (let x = 0; x < MAP_WIDTH; x++) {
+      for (let y = 0; y < MAP_HEIGHT; y++) {
         const tile = this.tiles[x][y];
         const texture = this.tilesheet.getTexture(tile);
         const sprite = new Sprite(texture);
@@ -90,30 +97,11 @@ export class Map {
     for (let index = 0; index < this.pathTiles.length; index++) {
       const pathTile = this.pathTiles[index];
 
-      this.generatePathTiles(pathTile);
+      if (pathTile.direction && this.tiles[pathTile.x])
+        this.tiles[pathTile.x][pathTile.y] = "path";
     }
 
     return this.pathTiles;
-  }
-
-  public generatePathTiles(tile: PathTile): void {
-    switch (tile.direction) {
-      case "up":
-        this.tiles[tile.x][tile.y] = "path";
-        break;
-      case "down":
-        this.tiles[tile.x][tile.y] = "path";
-        break;
-      case "left":
-        this.tiles[tile.x][tile.y] = "path";
-        break;
-      case "right":
-        this.tiles[tile.x][tile.y] = "path";
-        break;
-      case "none":
-        break;
-    }
-    return;
   }
 
   private getPathDirection(
@@ -140,11 +128,11 @@ export class Map {
   private getStartingTileDirection(tile: [number, number]): PathDirection {
     if (tile[0] === 0) {
       return "right";
-    } else if (tile[0] === mapWidth - 1) {
+    } else if (tile[0] === MAP_WIDTH - 1) {
       return "left";
     } else if (tile[1] === 0) {
       return "down";
-    } else if (tile[1] === mapHeight - 1) {
+    } else if (tile[1] === MAP_HEIGHT - 1) {
       return "up";
     } else {
       throw new Error("Starting tile is not on the edge of the map");
