@@ -1,6 +1,6 @@
 import { Container, Sprite, Texture } from "pixi.js";
-import { TileKey, Tilesheet } from "../tilesheet";
-import { MAP_HEIGHT, MAP_WIDTH } from "../shared/constants";
+import { Tilesheet } from "../tilesheet";
+import { MAP_HEIGHT, MAP_WIDTH, TileKey } from "../shared/constants";
 
 const defaultTile: TileKey = "grass";
 

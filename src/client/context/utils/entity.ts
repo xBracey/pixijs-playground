@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 
 interface EntityProps {
   id?: string;
+  idPrefix?: string;
   tint?: ColorSource;
 }
 
@@ -12,7 +13,8 @@ export class Entity extends Sprite {
 
   constructor(options: SpriteOptions & EntityProps) {
     super(options);
-    this.id = options.id ?? v4();
+    this.id =
+      options.id ?? options.idPrefix ? `${options.idPrefix}-${v4()}` : v4();
     this.anchor.set(0.5, 0.5);
     this.texture = options.texture ?? Texture.WHITE;
     this.tint = options.tint ?? 0xffffff;

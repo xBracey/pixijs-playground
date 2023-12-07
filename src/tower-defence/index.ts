@@ -1,17 +1,23 @@
 import { PixiBase } from "../client/context/pixi";
+import { EntityGroup } from "../client/context/utils/entityGroup";
 import { Enemy } from "./enemy";
 import { Map } from "./map";
 import { mapPathConfig } from "./mapPathConfig";
+import { Tower } from "./towers";
 
 export class TowerDefenceGame {
   private readonly app: PixiBase;
   private readonly map: Map;
   private readonly enemies: Record<string, Enemy>;
+  private readonly towers: Record<string, Tower>;
+  private readonly entityGroup: EntityGroup;
 
   constructor() {
     this.app = new PixiBase(16 * 64, 12 * 64);
     this.map = new Map();
     this.enemies = {};
+    this.towers = {};
+    this.entityGroup = new EntityGroup(this.onCollision.bind(this));
 
     this.map.load().then(() => {
       this.map.loadPathConfig(mapPathConfig);
@@ -46,4 +52,17 @@ export class TowerDefenceGame {
       }, 250 * i);
     }
   }
+
+  public createTower(x: number, y: number): void {
+    const tower = new Tower(
+      this.map.getTexture("tankBody"),
+      this.map.getTexture("tankCannon"),
+      x,
+      y
+    );
+    this.app.stage.addChild(tower);
+    this.towers[tower.id] = tower;
+  }
+
+  private onCollision(id: string, otherId: string): void {}
 }

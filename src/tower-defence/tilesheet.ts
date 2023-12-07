@@ -1,20 +1,5 @@
-import { Assets, AssetsClass, Loader, Spritesheet, Texture } from "pixi.js";
-
-export type TileKey =
-  | "grassBottomRight"
-  | "grassBottom"
-  | "grassBottomLeft"
-  | "grassRight"
-  | "grass"
-  | "grassLeft"
-  | "grassTopRight"
-  | "grassTop"
-  | "grassTopLeft"
-  | "path"
-  | "tree"
-  | "enemy"
-  | "tankBody"
-  | "tankCannon";
+import { Assets, Spritesheet, Texture } from "pixi.js";
+import { TileKey } from "./shared/constants";
 
 const tileSize = 64;
 const spritesheetWidth = 23 * tileSize;

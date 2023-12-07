@@ -18,7 +18,9 @@ export const Towers = ({ game }: TowersProps) => {
 
   return (
     <>
-      {isPlacingTower && <TowerPlacer setIsPlacingTower={setIsPlacingTower} />}
+      {isPlacingTower && (
+        <TowerPlacer setIsPlacingTower={setIsPlacingTower} game={game} />
+      )}
 
       <button
         className="absolute top-0 right-0 z-20 bg-blue-600 rounded-full flex items-center justify-center w-12 h-12"

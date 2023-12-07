@@ -1,12 +1,21 @@
-import React from "react";
+import React, { CSSProperties } from "react";
+import { TowerDefenceGame } from "..";
+import { SPRITES, TILE_SIZE } from "../shared/constants";
 
 interface TowerPlacerProps {
   setIsPlacingTower: (isPlacingTower: boolean) => void;
+  game: TowerDefenceGame;
 }
 
-const CIRCLE_RADIUS = 16;
+const CIRCLE_RADIUS = 64;
 
-export const TowerPlacer = ({ setIsPlacingTower }: TowerPlacerProps) => {
+const getBackgroundPosition = (sprite: keyof typeof SPRITES) => {
+  return `left -${SPRITES[sprite][0] * TILE_SIZE}px top -${
+    SPRITES[sprite][1] * TILE_SIZE
+  }px`;
+};
+
+export const TowerPlacer = ({ setIsPlacingTower, game }: TowerPlacerProps) => {
   const [position, setPosition] = React.useState<{
     x: number;
     y: number;
@@ -19,22 +28,43 @@ export const TowerPlacer = ({ setIsPlacingTower }: TowerPlacerProps) => {
     setPosition({ x, y });
   };
 
+  const onClick = () => {
+    if (position) {
+      game.createTower(position.x, position.y);
+      setIsPlacingTower(false);
+    }
+  };
+
+  const centerStyle: CSSProperties = {
+    position: "absolute",
+    top: position?.y,
+    left: position?.x,
+  };
+
   return (
     <div
       className="absolute top-0 left-0 bottom-0 right-0"
       onMouseMove={onMouseMove}
-      onClick={() => {
-        setIsPlacingTower(false);
-      }}
+      onClick={onClick}
     >
-      <div
-        className="h-4 w-4 bg-red-400 rounded-full"
-        style={{
-          position: "absolute",
-          top: position?.y,
-          left: position?.x,
-        }}
-      />
+      <div className="h-16 w-16" style={centerStyle}>
+        <div className="z-30 bg-blue-600 opacity-25 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-48 w-48" />
+
+        <div
+          className="absolute h-16 w-16 z-10 top-0 left-0 right-0 bottom-0"
+          style={{
+            background: "url(/tower-defence/tilesheet.png)",
+            backgroundPosition: getBackgroundPosition("tankBody"),
+          }}
+        />
+        <div
+          className="absolute h-16 w-16 z-20 top-0 left-0 right-0 bottom-0"
+          style={{
+            background: "url(/tower-defence/tilesheet.png)",
+            backgroundPosition: getBackgroundPosition("tankCannon"),
+          }}
+        />
+      </div>
     </div>
   );
 };

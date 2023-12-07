@@ -15,7 +15,7 @@ export class Enemy extends Entity {
     texture: Texture,
     onDestroyEnemy: (id: string) => void
   ) {
-    super({ texture, id: "enemy" });
+    super({ texture, idPrefix: "enemy" });
     this.pathTiles = pathTiles;
     this.currentPathTileIndex = 0;
     this.x = -TILE_SIZE;
