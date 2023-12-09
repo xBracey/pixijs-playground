@@ -1,7 +1,7 @@
 import { Sprite, Texture } from "pixi.js";
 import { PathTile } from "../map";
-import { Entity } from "../../client/context/utils/entity";
 import { TILE_SIZE } from "../shared/constants";
+import { Entity } from "../utils/entity";
 
 export class Enemy extends Entity {
   private pathTiles: PathTile[];
@@ -16,6 +16,7 @@ export class Enemy extends Entity {
     onDestroyEnemy: (id: string) => void
   ) {
     super({ texture, idPrefix: "enemy" });
+    console.log(this.id);
     this.pathTiles = pathTiles;
     this.currentPathTileIndex = 0;
     this.x = -TILE_SIZE;

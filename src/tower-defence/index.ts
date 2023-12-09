@@ -1,9 +1,9 @@
 import { PixiBase } from "../client/context/pixi";
-import { EntityGroup } from "../client/context/utils/entityGroup";
 import { Enemy } from "./enemy";
 import { Map } from "./map";
 import { mapPathConfig } from "./mapPathConfig";
 import { Tower } from "./towers";
+import { EntityGroup } from "./utils/entityGroup";
 
 export class TowerDefenceGame {
   private readonly app: PixiBase;
@@ -23,6 +23,13 @@ export class TowerDefenceGame {
       this.map.loadPathConfig(mapPathConfig);
       this.app.stage.addChild(this.map.getMapContainer());
       this.app.ticker.start();
+      this.app.ticker.add(this.onTick.bind(this));
+    });
+  }
+
+  public onTick(): void {
+    Object.values(this.towers).forEach((tower) => {
+      this.entityGroup.onCheckCollision(tower.rangeEntity.id);
     });
   }
 
@@ -46,6 +53,7 @@ export class TowerDefenceGame {
       this.app.stage.addChild(enemy);
       this.app.ticker.add(enemy.onTick.bind(enemy));
       this.enemies[enemy.id] = enemy;
+      this.entityGroup.add(enemy);
 
       setTimeout(() => {
         enemy.start();
@@ -62,7 +70,22 @@ export class TowerDefenceGame {
     );
     this.app.stage.addChild(tower);
     this.towers[tower.id] = tower;
+    this.entityGroup.add(tower.rangeEntity);
   }
 
-  private onCollision(id: string, otherId: string): void {}
+  private onCollision(id: string, otherIds: string[]): void {
+    const tower = this.towers[id];
+
+    const enemyCollisions = otherIds
+      .filter((otherId) => {
+        return this.enemies[otherId];
+      })
+      .map((otherId) => {
+        return this.enemies[otherId];
+      });
+
+    if (tower && enemyCollisions.length > 0) {
+      tower.fire(enemyCollisions[0]);
+    }
+  }
 }

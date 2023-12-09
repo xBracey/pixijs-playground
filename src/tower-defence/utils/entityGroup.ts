@@ -2,9 +2,9 @@ import { Entity } from "./entity";
 
 export class EntityGroup {
   private entities: Record<string, Entity>;
-  private onCollisionCallback: (id: string, otherId: string) => void;
+  private onCollisionCallback: (id: string, otherIds: string[]) => void;
 
-  constructor(onCollisionCallback: (id: string, otherId: string) => void) {
+  constructor(onCollisionCallback: (id: string, otherIds: string[]) => void) {
     this.entities = {};
     this.onCollisionCallback = onCollisionCallback;
   }
@@ -35,13 +35,16 @@ export class EntityGroup {
 
   onCheckCollision(id: string) {
     const entity = this.entities[id];
+    const collisions: string[] = [];
 
     Object.values(this.entities).forEach((otherEntity) => {
       if (otherEntity.id === id) return;
 
       if (entity.getBounds().intersects(otherEntity.getBounds())) {
-        this.onCollisionCallback(id, otherEntity.id);
+        collisions.push(otherEntity.id);
       }
     });
+
+    this.onCollisionCallback(id, collisions);
   }
 }
